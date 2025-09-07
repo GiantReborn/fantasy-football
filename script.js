@@ -9,10 +9,10 @@ const players = [
   { id: 4, name: "Erling Haaland", pos: "FWD" }
 ]
 
-// Define a squad (11 normally, but here just 4 for demo)
+// Define a squad (4 players)
 const squad = [1, 2, 3, 4] // player IDs
 
-// Define events from a match
+// Defining events from a match
 // type: "minutes", "goal", "assist", "clean_sheet", "yellow", "red"
 const events = [
   { player_id: 1, type: "minutes", value: 90 },
