@@ -1,4 +1,4 @@
-A simple but growing Fantasy Football web app built with HTML, CSS, and JavaScript.
+A simple Fantasy Football web app built with HTML, CSS, and JavaScript.
 Users can view players, build fantasy squads, and interact with features that simulate real-world fantasy football.
 
 🚀 Features
