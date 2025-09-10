@@ -11,5 +11,8 @@ Users can view players, build fantasy squads, and interact with features that si
 
 💡 Expandable Features – Code structured for future upgrades (live scores, transfers, budgets, etc.).
 
+Link to demo:
+https://giantreborn.github.io/fantasy-football/
+
 
 
