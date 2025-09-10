@@ -1,70 +1,66 @@
-// fpl-sample.js
-// Simple Fantasy Premier League sample in one file
-
-// Define some players
 const players = [
-  { id: 1, name: "Alisson Becker", pos: "GK" },
-  { id: 2, name: "Trent Alexander-Arnold", pos: "DEF" },
-  { id: 3, name: "Kevin De Bruyne", pos: "MID" },
-  { id: 4, name: "Erling Haaland", pos: "FWD" }
-]
+  { id: 1, name: "Alisson Becker", pos: "GK", points: 6 },
+  { id: 2, name: "Trent Alexander-Arnold", pos: "DEF", points: 8 },
+  { id: 3, name: "Kevin De Bruyne", pos: "MID", points: 10 },
+  { id: 4, name: "Erling Haaland", pos: "FWD", points: 12 }
+];
 
-// Define a squad (4 players)
-const squad = [1, 2, 3, 4] // player IDs
+const playerList = document.getElementById("player-list");
+const squadList = document.getElementById("squad-list");
+const resetBtn = document.getElementById("reset");
+const pointsDisplay = document.getElementById("points"); // 👈 add <p id="points"></p> in your HTML
 
-// Defining events from a match
-// type: "minutes", "goal", "assist", "clean_sheet", "yellow", "red"
-const events = [
-  { player_id: 1, type: "minutes", value: 90 },
-  { player_id: 1, type: "clean_sheet" },
-  { player_id: 2, type: "minutes", value: 90 },
-  { player_id: 2, type: "assist" },
-  { player_id: 3, type: "minutes", value: 75 },
-  { player_id: 3, type: "goal" },
-  { player_id: 4, type: "minutes", value: 90 },
-  { player_id: 4, type: "goal" },
-  { player_id: 4, type: "goal" }
-]
+let squad = [];
 
-// Simple scoring system
-function scoreEvent(event, pos) {
-  switch (event.type) {
-    case "minutes": return event.value >= 60 ? 2 : 1
-    case "goal":
-      if (pos === "FWD") return 4
-      if (pos === "MID") return 5
-      return 6 // DEF or GK
-    case "assist": return 3
-    case "clean_sheet":
-      if (pos === "GK" || pos === "DEF") return 4
-      if (pos === "MID") return 1
-      return 0
-    case "yellow": return -1
-    case "red": return -3
-    default: return 0
+// Render players
+players.forEach(player => {
+  const li = document.createElement("li");
+  li.textContent = `${player.name} (${player.pos}) - ${player.points} pts`;
+
+  const btn = document.createElement("button");
+  btn.textContent = "Add";
+  btn.onclick = () => addToSquad(player);
+
+  li.appendChild(btn);
+  playerList.appendChild(li);
+});
+
+function addToSquad(player) {
+  if (!squad.includes(player)) {
+    squad.push(player);
+    updateSquad();
+  } else {
+    alert(`${player.name} is already in your squad!`);
   }
 }
 
-// Calculate squad score
-function calculateScore(squad, players, events) {
-  const points = {}
-  for (const pid of squad) points[pid] = 0
-
-  for (const ev of events) {
-    if (!points.hasOwnProperty(ev.player_id)) continue
-    const player = players.find(p => p.id === ev.player_id)
-    points[ev.player_id] += scoreEvent(ev, player.pos)
-  }
-
-  let total = 0
-  console.log("Points breakdown:")
-  for (const pid of squad) {
-    const player = players.find(p => p.id === pid)
-    console.log(`${player.name} (${player.pos}) -> ${points[pid]} pts`)
-    total += points[pid]
-  }
-  console.log("Total Squad Points:", total)
+function removeFromSquad(player) {
+  squad = squad.filter(p => p.id !== player.id);
+  updateSquad();
 }
 
-// Run sample
-calculateScore(squad, players, events)
+function updateSquad() {
+  squadList.innerHTML = "";
+  let totalPoints = 0;
+
+  squad.forEach(player => {
+    totalPoints += player.points;
+
+    const li = document.createElement("li");
+    li.textContent = `${player.name} (${player.pos}) - ${player.points} pts`;
+
+    const removeBtn = document.createElement("button");
+    removeBtn.textContent = "Remove";
+    removeBtn.onclick = () => removeFromSquad(player);
+
+    li.appendChild(removeBtn);
+    squadList.appendChild(li);
+  });
+
+  pointsDisplay.textContent = `Total Points: ${totalPoints}`;
+}
+
+resetBtn.onclick = () => {
+  squad = [];
+  updateSquad();
+};
